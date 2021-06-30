@@ -35,6 +35,15 @@ This module comes with automation via Github Actions which can be found in the `
 - `ci.yml` - The CI for development snapshots and master builds
 - `pr.yml` - For pull requests
 
+## Layout
+
+Here is a description of the layout of a CommandBox module:
+
+- `.github` - Github workflows
+- `build` - Hosts a `Build.cfc` task runner that builds, tests and documents your module. You will have to add your tests via the `runRTests()` method.
+- `commands` - The commands for you to implement.
+- `changelog.md` - Your changelog file
+
 ----
 
 
