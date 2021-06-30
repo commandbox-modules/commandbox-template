@@ -1,0 +1,38 @@
+{
+    "name":"@module_name@",
+    "version":"1.0.0",
+    "location":"https://downloads.ortussolutions.com/ortussolutions/commandbox-modules/@module_id@/@build.version@/@module_id@-@build.version@.zip",
+    "slug":"@module_id@",
+    "author":"Ortus Solutions, Corp",
+    "homepage":"https://www.forgebox.io/view/@module_id@",
+    "documentation":"https://github.com/commandbox-modules/wiki",
+    "repository":{
+        "type":"git",
+        "url":"https://github.com/commandbox-modules/@module_id@"
+    },
+    "bugs":"https://github.com/commandbox-modules/@module_id@/issues",
+    "shortDescription":"@module_description@",
+    "type":"commandbox-modules",
+    "keywords": [],
+    "license":[
+        {
+            "type":"Apache2",
+            "url":"http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    ],
+    "contributors":[
+    ],
+	"devDependencies":{
+        "commandbox-docbox":"*"
+    },
+    "dependencies":{
+    },
+    "installPaths":{
+    },
+    "scripts":{
+        "release":"recipe build/release.boxr",
+        "format":"cfformat run commands,build,ModuleConfig.cfc --overwrite",
+        "format:watch":"cfformat watch commands,build,ModuleConfig.cfc",
+        "format:check":"cfformat check commands,build,ModuleConfig.cfc"
+    }
+}

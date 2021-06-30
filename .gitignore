@@ -1,0 +1,7 @@
+# Dependencies
+/docbox/**
+
+# Build Artifacts
+.tmp/**
+.artifacts/**
+changelog-latest.md
