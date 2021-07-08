@@ -1,16 +1,16 @@
 {
     "name":"@module_name@",
     "version":"1.0.0",
-    "location":"https://downloads.ortussolutions.com/ortussolutions/commandbox-modules/@module_id@/@build.version@/@module_id@-@build.version@.zip",
-    "slug":"@module_id@",
+    "location":"https://downloads.ortussolutions.com/ortussolutions/commandbox-modules/@module_slug@/@build.version@/@module_slug@-@build.version@.zip",
+    "slug":"@module_slug@",
     "author":"Ortus Solutions, Corp",
-    "homepage":"https://www.forgebox.io/view/@module_id@",
+    "homepage":"https://www.forgebox.io/view/@module_slug@",
     "documentation":"https://github.com/commandbox-modules/wiki",
     "repository":{
         "type":"git",
-        "url":"https://github.com/commandbox-modules/@module_id@"
+        "url":"https://github.com/commandbox-modules/@module_slug@"
     },
-    "bugs":"https://github.com/commandbox-modules/@module_id@/issues",
+    "bugs":"https://github.com/commandbox-modules/@module_slug@/issues",
     "shortDescription":"@module_description@",
     "type":"commandbox-modules",
     "keywords": [],

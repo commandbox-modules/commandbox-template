@@ -7,8 +7,8 @@
 */
 component {
 
-	this.cfmapping = "@module_id@";
-	this.modelNamespace = "@module_id@";
+	this.cfmapping = "@module_slug@";
+	this.modelNamespace = "@module_slug@";
 
 	function configure() {
 
