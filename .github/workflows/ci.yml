@@ -27,17 +27,8 @@ jobs:
           distribution: "adopt"
           java-version: "11"
 
-      - name: Cache CommandBox Dependencies
-        uses: actions/cache@v1
-        if: ${{ true }}
-        with:
-          path: ~/.CommandBox/artifacts
-          key: ${{ runner.OS }}-commandbox-cache-${{ hashFiles( 'box.json' ) }}
-          restore-keys: |
-            ${{ runner.OS }}-commandbox-cache-${{ hashFiles( 'box.json' ) }}
-
       - name: Setup CommandBox
-        uses: elpete/setup-commandbox@v1.0.0
+        uses: Ortus-Solutions/setup-commandbox@main
         with:
           forgeboxAPIKey: ${{ secrets.FORGEBOX_API_TOKEN }}
 
@@ -63,9 +54,7 @@ jobs:
         run: |
           # Create the CommandBox modules folder, for some reason it is not created
           mkdir -p ~/.CommandBox/cfml/modules
-          # Link up the module so we can do testing!
-          box link --force
-          # Build Project
+          # Build Project with Tests Included
           box task run taskfile=build/Build :version=${{ env.VERSION }} :projectName=${{ env.MODULE_ID }} :buildID=${{ github.run_number }} :branch=${{ env.BRANCH }}
 
       - name: Failure Logs

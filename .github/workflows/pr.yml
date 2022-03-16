@@ -25,7 +25,7 @@ jobs:
           java-version: "11"
 
       - name: Setup CommandBox
-        uses: elpete/setup-commandbox@v1.0.0
+        uses: Ortus-Solutions/setup-commandbox@main
 
       - name: Install Dependencies
         run: |
@@ -35,15 +35,14 @@ jobs:
         run: |
           # Create the CommandBox modules folder, for some reason it is not created
           mkdir -p ~/.CommandBox/cfml/modules
-          # Link up the module so we can do testing!
-          box link --force
-          # Test
-          box task run taskfile=build/Build target="runTests"
+          # Test away
+          box run-script runTests
 
       - name: Failure Logs
         if: failure()
         run: cat `box system-log`
 
+  # Format PR
   format:
     name: Format
     runs-on: ubuntu-20.04
@@ -51,20 +50,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Setup Java
-        uses: actions/setup-java@v2
+      - uses: Ortus-Solutions/commandbox-action@v1.0.2
         with:
-          distribution: "adopt"
-          java-version: "11"
-
-      - name: Set Up CommandBox
-        uses: elpete/setup-commandbox@v1.0.0
-
-      - name: Install CFFormat
-        run: box install commandbox-cfformat
-
-      - name: Run CFFormat
-        run: box run-script format
+          cmd: run-script format
 
       - name: Commit Format Changes
         uses: stefanzweifel/git-auto-commit-action@v4

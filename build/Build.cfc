@@ -98,7 +98,7 @@ component {
 			.line()
 			.boldMagentaLine( "Linking your module..." )
 			.toConsole();
-		command( "link" ).run();
+		command( "link --force" ).run();
 
 		// Tests First, if they fail then exit
 		try {
