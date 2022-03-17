@@ -91,27 +91,13 @@ component {
 			.boldGreenLine( "------------------------------------------------" )
 			.boldGreenLine( "Starting to execute your tests..." )
 			.boldGreenLine( "------------------------------------------------" )
+			.toConsole();
 
 		var sTime = getTickCount();
 
-		variables.print
-			.line()
-			.boldMagentaLine( "Linking your module..." )
-			.toConsole();
-		command( "link --force" ).run();
-
 		// Tests First, if they fail then exit
-		try {
-			// Run your tests via the `command()` options here.
-			command( "task run build/Tests.cfc" ).run();
-		} finally {
-			// Unlink your module
-			variables.print
-				.line()
-				.boldMagentaLine( "Unlinking your module..." )
-				.toConsole();
-			command( "unlink" ).run();
-		}
+		// Run your tests via the `command()` options here.
+		command( "task run build/Tests.cfc" ).run();
 
 		// Check Exit Code?
 		if ( shell.getExitCode() ) {
