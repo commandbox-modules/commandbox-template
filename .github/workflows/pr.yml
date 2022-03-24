@@ -35,6 +35,7 @@ jobs:
         run: |
           # Create the CommandBox modules folder, for some reason it is not created
           mkdir -p ~/.CommandBox/cfml/modules
+          box link --force
           # Test away
           box run-script runTests
 
