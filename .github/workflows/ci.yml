@@ -35,7 +35,7 @@ jobs:
           java-version: "11"
 
       - name: Setup CommandBox
-        uses: elpete/setup-commandbox@v2.0.1
+        uses: Ortus-Solutions/setup-commandbox@v2.0.1
         with:
           forgeboxAPIKey: ${{ secrets.FORGEBOX_API_TOKEN }}
 
@@ -61,9 +61,8 @@ jobs:
         run: |
           # Create the CommandBox modules folder, for some reason it is not created
           mkdir -p ~/.CommandBox/cfml/modules
-          # Link up the module so we can do testing!
           box link --force
-          # Build Project
+          # Build Project with Tests Included
           box task run taskfile=build/Build :version=${{ env.VERSION }} :projectName=${{ env.MODULE_ID }} :buildID=${{ github.run_number }} :branch=${{ env.BRANCH }}
 
       - name: Failure Logs

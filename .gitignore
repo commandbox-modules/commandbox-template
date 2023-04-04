@@ -1,5 +1,6 @@
 # Dependencies
 /docbox/**
+modules/**
 
 # Build Artifacts
 .tmp/**

@@ -14,6 +14,7 @@ component {
 		variables.buildDir     = cwd & "/.tmp";
 		variables.apiDocsURL   = "http://localhost:60299/apidocs/";
 		variables.testRunner   = "http://localhost:60299/tests/runner.cfm";
+		variables.exportsDir   = "";
 
 		// Source Excludes Not Added to final binary: You can use REGEX
 		variables.excludes = [
@@ -37,10 +38,7 @@ component {
 		} );
 
 		// Create Project Dependency Mappings
-		//fileSystemUtil.createMapping(
-		//	"contentbox-cli",
-		//	variables.cwd
-		//);
+		fileSystemUtil.createMapping( "@module_name@", variables.cwd );
 
 		return this;
 	}
@@ -79,7 +77,7 @@ component {
 		latestChangelog();
 
 		// Finalize Message
-		print
+		variables.print
 			.line()
 			.boldMagentaLine( "Build Process is done! Enjoy your build!" )
 			.toConsole();
@@ -89,12 +87,29 @@ component {
 	 * Run the test suites
 	 */
 	function runTests(){
+		variables.print
+			.line()
+			.boldGreenLine( "------------------------------------------------" )
+			.boldGreenLine( "Starting to execute your tests..." )
+			.boldGreenLine( "------------------------------------------------" )
+			.toConsole();
+
+		var sTime = getTickCount();
+
 		// Tests First, if they fail then exit
-		print.blueLine( "Testing the package, please wait..." ).toConsole();
+		// Run your tests via the `command()` options here.
+		command( "task run build/Tests.cfc" ).run();
 
 		// Check Exit Code?
 		if ( shell.getExitCode() ) {
 			return error( "X Cannot continue building, tests failed!" );
+		} else {
+			variables.print
+				.line()
+				.boldGreenLine( "------------------------------------------------" )
+				.boldGreenLine( "All tests passed in #getTickCount() - sTime#ms! Ready to go, great job!" )
+				.boldGreenLine( "------------------------------------------------" )
+				.toConsole();
 		}
 	}
 
@@ -113,7 +128,7 @@ component {
 		branch  = "development"
 	){
 		// Build Notice ID
-		print
+		variables.print
 			.line()
 			.boldMagentaLine(
 				"Building #arguments.projectName# v#arguments.version#+#arguments.buildID# from #cwd# using the #arguments.branch# branch."
@@ -193,11 +208,12 @@ component {
 		print.greenLine( "Generating API Docs, please wait..." ).toConsole();
 		directoryCreate( arguments.outputDir, true, true );
 
+		// Generate the docs
 		command( "docbox generate" )
 			.params(
 				"source"                = "commands",
-				"excludes"				= "",
-				"mapping"               = "contentbox-cli",
+				"excludes"              = "",
+				"mapping"               = "@module_name@",
 				"strategy-projectTitle" = "#arguments.projectName# v#arguments.version#",
 				"strategy-outputDir"    = arguments.outputDir
 			)
@@ -231,8 +247,8 @@ component {
 			fileRead( variables.cwd & "changelog.md" ).split( "----" )[ 2 ].trim() & chr( 13 ) & chr( 10 )
 		);
 
-		print
-			.greenLine( "Latest changelog file created at `changelog-latest.md`" )
+		variables.print
+			.greenBoldLine( "  √ Latest changelog file created at `changelog-latest.md`" )
 			.line()
 			.line( fileRead( variables.cwd & "changelog-latest.md" ) );
 	}
