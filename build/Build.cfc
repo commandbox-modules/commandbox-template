@@ -20,6 +20,7 @@ component {
 			"build",
 			"test\-harness",
 			"tests",
+			"docker-compose.yml",
 			"^\..*"
 		];
 
@@ -89,6 +90,7 @@ component {
 	 */
 	function runTests(){
 		// Tests First, if they fail then exit
+		print.blueLine( "Testing the package, please wait..." ).toConsole();
 
 		// Check Exit Code?
 		if ( shell.getExitCode() ) {
@@ -111,15 +113,14 @@ component {
 		branch  = "development"
 	){
 		// Build Notice ID
-		print.line()
+		print
+			.line()
 			.boldMagentaLine(
-				"+ Building #arguments.projectName# v#arguments.version#+#arguments.buildID# from #cwd# using the #arguments.branch# branch."
+				"Building #arguments.projectName# v#arguments.version#+#arguments.buildID# from #cwd# using the #arguments.branch# branch."
 			)
 			.toConsole();
 
-		// Prepare exports directory
-		variables.exportsDir = variables.artifactsDir & "/#projectName#/#arguments.version#";
-		directoryCreate( variables.exportsDir, true, true );
+		ensureExportDir( argumentCollection = arguments );
 
 		// Project Build Dir
 		variables.projectBuildDir = variables.buildDir & "/#projectName#";
@@ -130,7 +131,7 @@ component {
 		);
 
 		// Copy source
-		print.blueLine( "+ Copying source to build folder..." ).toConsole();
+		print.blueLine( "Copying source to build folder..." ).toConsole();
 		copy(
 			variables.cwd,
 			variables.projectBuildDir
@@ -143,7 +144,7 @@ component {
 		);
 
 		// Updating Placeholders
-		print.greenLine( "+ Updating version identifier to #arguments.version#" ).toConsole();
+		print.greenLine( "Updating version identifier to #arguments.version#" ).toConsole();
 		command( "tokenReplace" )
 			.params(
 				path        = "/#variables.projectBuildDir#/**",
@@ -152,7 +153,7 @@ component {
 			)
 			.run();
 
-		print.greenLine( "+ Updating build identifier to #arguments.buildID#" ).toConsole();
+		print.greenLine( "Updating build identifier to #arguments.buildID#" ).toConsole();
 		command( "tokenReplace" )
 			.params(
 				path        = "/#variables.projectBuildDir#/**",
@@ -163,7 +164,7 @@ component {
 
 		// zip up source
 		var destination = "#variables.exportsDir#/#projectName#-#version#.zip";
-		print.greenLine( "+ Zipping code to #destination#" ).toConsole();
+		print.greenLine( "Zipping code to #destination#" ).toConsole();
 		cfzip(
 			action    = "zip",
 			file      = "#destination#",
@@ -187,8 +188,9 @@ component {
 		version   = "1.0.0",
 		outputDir = ".tmp/apidocs"
 	){
+		ensureExportDir( argumentCollection = arguments );
 		// Generate Docs
-		print.greenLine( "+ Generating API Docs, please wait..." ).toConsole();
+		print.greenLine( "Generating API Docs, please wait..." ).toConsole();
 		directoryCreate( arguments.outputDir, true, true );
 
 		command( "docbox generate" )
@@ -201,10 +203,10 @@ component {
 			)
 			.run();
 
-		print.greenBoldLine( "  √ API Docs produced at #arguments.outputDir#" ).toConsole();
+		print.greenLine( "API Docs produced at #arguments.outputDir#" ).toConsole();
 
 		var destination = "#variables.exportsDir#/#projectName#-docs-#version#.zip";
-		print.greenLine( "  +Zipping apidocs to #destination#" ).toConsole();
+		print.greenLine( "Zipping apidocs to #destination#" ).toConsole();
 		cfzip(
 			action    = "zip",
 			file      = "#destination#",
@@ -218,10 +220,10 @@ component {
 	 * Build the latest changelog file: changelog-latest.md
 	 */
 	function latestChangelog(){
-		print.blueLine( "+ Building latest changelog..." ).toConsole();
+		print.blueLine( "Building latest changelog..." ).toConsole();
 
 		if ( !fileExists( variables.cwd & "changelog.md" ) ) {
-			return error( "X Cannot continue building, changelog.md file doesn't exist!" );
+			return error( "Cannot continue building, changelog.md file doesn't exist!" );
 		}
 
 		fileWrite(
@@ -229,7 +231,8 @@ component {
 			fileRead( variables.cwd & "changelog.md" ).split( "----" )[ 2 ].trim() & chr( 13 ) & chr( 10 )
 		);
 
-		print.greenBoldLine( "  √ Latest changelog file created at `changelog-latest.md`" )
+		print
+			.greenLine( "Latest changelog file created at `changelog-latest.md`" )
 			.line()
 			.line( fileRead( variables.cwd & "changelog-latest.md" ) );
 	}
@@ -280,10 +283,10 @@ component {
 		).each( function( item ){
 			// Copy to target
 			if ( fileExists( item ) ) {
-				print.blueLine( "  > Copying #item#" ).toConsole();
+				print.blueLine( "Copying #item#" ).toConsole();
 				fileCopy( item, target );
 			} else {
-				print.greenLine( "  > Copying directory #item#" ).toConsole();
+				print.greenLine( "Copying directory #item#" ).toConsole();
 				directoryCopy(
 					item,
 					target & "/" & item.replace( src, "" ),
@@ -298,6 +301,21 @@ component {
 	 **/
 	private function getExitCode(){
 		return ( createObject( "java", "java.lang.System" ).getProperty( "cfml.cli.exitCode" ) ?: 0 );
+	}
+
+	/**
+	 * Ensure the export directory exists at artifacts/NAME/VERSION/
+	 */
+	private function ensureExportDir(
+		required projectName,
+		version   = "1.0.0"
+	){
+		if ( structKeyExists( variables, "exportsDir" ) && directoryExists( variables.exportsDir ) ){
+			return;
+		}
+		// Prepare exports directory
+		variables.exportsDir = variables.artifactsDir & "/#projectName#/#arguments.version#";
+		directoryCreate( variables.exportsDir, true, true );
 	}
 
 }

@@ -6,67 +6,23 @@ on:
       - "main"
       - "master"
       - "development"
+      - "v*"
   pull_request:
     branches:
+      - "v*"
       - development
 
 jobs:
   tests:
-    name: Tests
+    uses: ./.github/workflows/tests.yml
+
+  formatCheck:
+    name: Checks Source Code Formatting
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3.2.0
 
-      - name: Setup Java
-        uses: actions/setup-java@v2
+      - uses: Ortus-Solutions/commandbox-action@v1.0.2
         with:
-          distribution: "adopt"
-          java-version: "11"
-
-      - name: Setup CommandBox
-        uses: elpete/setup-commandbox@v1.0.0
-
-      - name: Install Dependencies
-        run: |
-          box install
-
-      - name: Run Tests
-        run: |
-          # Create the CommandBox modules folder, for some reason it is not created
-          mkdir -p ~/.CommandBox/cfml/modules
-          # Link up the module so we can do testing!
-          box link --force
-          # Test
-          box task run taskfile=build/Build target="runTests"
-
-      - name: Failure Logs
-        if: failure()
-        run: cat `box system-log`
-
-  format:
-    name: Format
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Setup Java
-        uses: actions/setup-java@v2
-        with:
-          distribution: "adopt"
-          java-version: "11"
-
-      - name: Set Up CommandBox
-        uses: elpete/setup-commandbox@v1.0.0
-
-      - name: Install CFFormat
-        run: box install commandbox-cfformat
-
-      - name: Run CFFormat
-        run: box run-script format
-
-      - name: Commit Format Changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Apply cfformat changes
+          cmd: run-script format:check

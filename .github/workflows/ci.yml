@@ -1,6 +1,5 @@
-name: @module_name@ CI
+name: @MODULE_NAME@ CI
 
-# Only on Development we build snapshots
 on:
   push:
     branches:
@@ -12,6 +11,14 @@ env:
 
 jobs:
   #############################################
+  # Tests First baby! We fail, no build :(
+  #############################################
+  tests:
+    uses: ./.github/workflows/tests.yml
+    secrets:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  #############################################
   # Build Module
   #############################################
   build:
@@ -19,25 +26,16 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3.2.0
 
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3.9.0
         with:
-          distribution: "adopt"
+          distribution: "temurin"
           java-version: "11"
 
-      - name: Cache CommandBox Dependencies
-        uses: actions/cache@v1
-        if: ${{ true }}
-        with:
-          path: ~/.CommandBox/artifacts
-          key: ${{ runner.OS }}-commandbox-cache-${{ hashFiles( 'box.json' ) }}
-          restore-keys: |
-            ${{ runner.OS }}-commandbox-cache-${{ hashFiles( 'box.json' ) }}
-
       - name: Setup CommandBox
-        uses: elpete/setup-commandbox@v1.0.0
+        uses: elpete/setup-commandbox@v2.0.1
         with:
           forgeboxAPIKey: ${{ secrets.FORGEBOX_API_TOKEN }}
 
@@ -74,7 +72,7 @@ jobs:
 
       - name: Upload Build Artifacts
         if: success()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3.1.1
         with:
           name: Module Artifacts
           path: |

@@ -1,10 +1,8 @@
 /**
-*********************************************************************************
-* Copyright Since 2014 CommandBox by Ortus Solutions, Corp
-* www.coldbox.org | www.ortussolutions.com
-********************************************************************************
-* @author
-*/
+ * Copyright Since 2005 ColdBox Framework by Luis Majano and Ortus Solutions, Corp
+ * www.ortussolutions.com
+ * ---
+ */
 component {
 
 	this.cfmapping = "@module_slug@";
