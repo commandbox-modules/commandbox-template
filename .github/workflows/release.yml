@@ -1,5 +1,4 @@
 name: Build a Release
-description: This workflow builds releases for snapshots or latest depending on it's inputs
 
 on:
   # If you push to master|main this will trigger a stable release
@@ -24,10 +23,7 @@ on:
         description: 'Bump Version as minor or patch'
         required: false
         default: 'minor'
-        type: choice
-        options:
-        - minor
-        - patch
+        type: string
 
 env:
   MODULE_ID: @MODULE_SLUG@
