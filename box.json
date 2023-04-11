@@ -43,6 +43,5 @@
         "format:check":"cfformat check commands,build,ModuleConfig.cfc ./.cfformat.json",
         "release":"recipe build/release.boxr",
         "setupTemplate": "task run taskFile=build/SetupTemplate.cfc"
-        
     }
 }
