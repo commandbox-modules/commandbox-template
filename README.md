@@ -54,7 +54,7 @@ Your module template comes with several useful package scripts:
 
 The github actions will clone, test, package, deploy your module to ForgeBox and the Ortus S3 accounts for API Docs and Artifacts.  So please make sure the following environment variables are set in your repository. ** Please note that most of them are already defined at the org level **
 
-- `FORGEBOX_TOKEN` - The Ortus ForgeBox API Token
+- `FORGEBOX_API_TOKEN` - The Ortus ForgeBox API Token
 - `AWS_ACCESS_KEY` - The travis user S3 account
 - `AWS_ACCESS_SECRET` - The travis secret S3
 
