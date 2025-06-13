@@ -17,7 +17,7 @@ on:
           type: boolean
 
 env:
-  MODULE_ID: @MODULE_SLUG@
+  MODULE_ID: ${{ github.event.repository.name }}
   SNAPSHOT: ${{ inputs.snapshot || false }}
 
 jobs:
