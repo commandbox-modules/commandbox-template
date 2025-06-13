@@ -11,9 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] - 2025-06-13
 
+## [1.0.0] - 2025-06-13
+
 ## [v1.0.0] => 2021-JUN-29
 
 - Initial Creation of this project
 
 [unreleased]: https://github.com/commandbox-modules/commandbox-template/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/commandbox-modules/commandbox-template/compare/f5f0ccba0cf2879e7955fffe724f702619aaefc3...v1.0.0
+[1.0.0]: https://github.com/commandbox-modules/commandbox-template/compare/v1.0.0...v1.0.0
