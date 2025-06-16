@@ -57,6 +57,11 @@ component {
 		buildID = createUUID(),
 		branch  = "development"
 	){
+		// If branch == development, then we are building a snapshot
+		if ( branch == "development" ) {
+			arguments.version = arguments.version & "-snapshot";
+		}
+
 		// Create project mapping
 		fileSystemUtil.createMapping( arguments.projectName, variables.cwd );
 
@@ -168,7 +173,7 @@ component {
 			.params(
 				path        = "/#variables.projectBuildDir#/**",
 				token       = ( arguments.branch == "master" ? "@build.number@" : "+@build.number@" ),
-				replacement = ( arguments.branch == "master" ? arguments.buildID : "-snapshot" )
+				replacement = ( arguments.branch == "master" ? arguments.buildID : "" )
 			)
 			.run();
 
